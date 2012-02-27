@@ -10,6 +10,11 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Some errors were found, please take a look:"
+
+    labels:
+      order_file:
+        file: "Pdf à signer"
+        signator: "Signataire"
     # Labels and hints examples
     # labels:
     #   password: 'Password'

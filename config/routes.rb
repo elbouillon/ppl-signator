@@ -1,7 +1,8 @@
 PplSignator::Application.routes.draw do
-  get "signer/new"
+  #get "signer/new"
 
-  get "signer/create"
+  #get "signer/create"
+  resources :order_files
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -52,7 +53,7 @@ PplSignator::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => 'signer#new'
+  root :to => 'order_files#new'
 
   # See how all your routes lay out with "rake routes"
 

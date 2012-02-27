@@ -1,0 +1,13 @@
+.page-header
+  %h1 Signer un PDF
+.alert.alert-info
+  %i.icon-question-sign
+  %strong Comment ça marche ?
+  C'est tout simple. Prenez votre PDF et envoyez le moi, je vous le retourne avec une belle signature!
+
+= simple_form_for @order_file, html: { class: "form-horizontal" } do |f|
+  =f.input :file, as: :file
+  =f.input :signator, as: :select, collection: OrderFile::SIGNATORS, include_blank: false
+  .form-actions
+    =f.submit "Merci de me signer le PDF, s'il te plaît", class: "btn-primary btn-large"
+
