@@ -1,4 +1,4 @@
-en:
+fr-CH:
   simple_form:
     "yes": 'Yes'
     "no": 'No'
@@ -13,8 +13,9 @@ en:
 
     labels:
       order_file:
-        file: "Pdf à signer"
+        upload: "Pdf à signer"
         signator: "Signataire"
+        delivery_date: "Date de livraison souhaitée"
     # Labels and hints examples
     # labels:
     #   password: 'Password'
