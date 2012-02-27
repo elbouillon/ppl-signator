@@ -1,0 +1,8 @@
+.page-header
+  %h1 Signer un PDF
+%p Pour ce faire, c'est tout simple. Prenez votre PDF et envoyez le moi, je vous le retourne avec une belle signature!
+
+- form_for @order_file do |f|
+  = f.simple_fields_for :file do |ff|
+    ff.input :file
+
