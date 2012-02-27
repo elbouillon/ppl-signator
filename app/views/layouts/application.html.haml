@@ -2,7 +2,8 @@
 %html
   %head
     %title PPL Signator - Tu signes ou tu t'en vas!
-    = javascript_include_tag :application
+    = stylesheet_link_tag :application
+    -#= javascript_include_tag :application
     = csrf_meta_tags
   %body
     - flash.each do |name, msg|
@@ -11,4 +12,3 @@
     .container
       = yield
 
-  = stylesheet_link_tag :application
