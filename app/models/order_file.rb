@@ -12,6 +12,9 @@ class OrderFile
   attribute :signator
   attribute :delivery_date
 
+  validate :uploaded_file_is_a_pdf
+  validates :delivery_date, presence: true
+
   def to_s
     "#{@original_filename} - #{@content_type}"
   end
@@ -51,5 +54,12 @@ class OrderFile
   def filename
     "confirmation_#{signator}_#{name}".parameterize + ".pdf"
   end
-end
 
+  private
+
+  def uploaded_file_is_a_pdf
+    if @content_type != "application/pdf"
+      errors.add :upload, "Eh moque! Je ne signe que les PDF, un peu de rigueur"
+    end
+  end
+end
