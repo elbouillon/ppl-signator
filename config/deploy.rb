@@ -1,3 +1,5 @@
+require "bundler/capistrano"
+
 # main application
 set :application, "ppl-signator"
 role :web, "dev.pplsa.ch"                          # Your HTTP server, Apache/etc
