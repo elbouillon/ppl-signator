@@ -26,6 +26,7 @@ gem 'haml-rails'
 gem 'less-rails-bootstrap', '~> 2.0.6'
 gem 'active_attr'
 gem 'prawn'
+gem 'capistrano'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
