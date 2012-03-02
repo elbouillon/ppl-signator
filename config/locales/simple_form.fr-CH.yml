@@ -16,6 +16,13 @@ fr-CH:
         upload: "Pdf à signer"
         signator: "Signataire"
         delivery_date: "Date de livraison souhaitée"
+        email_subject: "Sujet de l'email"
+        email_address: "Adresse email"
+
+    hints:
+      order_file:
+        email_subject: "Il faut copier/coller le sujet de l'email reçu pour la commande, s'il n'y a pas de texte, aucun email n'est envoyé"
+
     # Labels and hints examples
     # labels:
     #   password: 'Password'

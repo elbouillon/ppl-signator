@@ -10,6 +10,16 @@
   =f.input :upload, as: :file
   =f.input :signator, as: :select, collection: OrderFile::SIGNATORS, include_blank: false
   =f.input :delivery_date, as: :select, collection: future_week_list, hint: "Aujourd'hui nous sommes le #{l Date.today} (semaine #{Date.today.cweek})"
+
+  %fieldset
+    %legend Optionnel - Envoi de l'email directement
+    =f.input :email_subject, input_html: { class: "span8" }
+    =f.input :email_address, as: :select, collection: %w[ fenstersarraz@gmail.com t.wagner@nestlefenster.de ], include_blank: false
+
+  .alert
+    %strong Attention!
+    Ne pas oublier de mettre le fichier signé dans feng avec la bonne date de livraison ;-)
+
   .form-actions
     =f.submit "Merci de me signer le PDF, s'il te plaît", class: "btn-primary btn-large"
 

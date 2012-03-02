@@ -11,6 +11,8 @@ class OrderFile
 
   attribute :signator
   attribute :delivery_date
+  attribute :email_subject
+  attribute :email_address
 
   validate :uploaded_file_is_a_pdf
   validates :delivery_date, presence: true
