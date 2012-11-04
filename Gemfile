@@ -19,7 +19,12 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+group :test do
+  gem 'minitest'
+  gem 'turn'
+end
+
+#gem 'jquery-rails'
 
 gem 'simple_form', '~> 2.0.1'
 gem 'haml-rails'

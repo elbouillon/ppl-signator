@@ -52,8 +52,8 @@ class OrderFile
   end
 
   def filename
-    n = /[0-9]{2}\-[0-9 A-Z]*/.match(name)
-    "#{n}_Confirmation".parameterize + ".pdf"
+    n = /(\d{2}\-\w*)|(\d{7})/.match(name)
+    "#{n}-confirmation".parameterize + ".pdf"
   end
 
   private

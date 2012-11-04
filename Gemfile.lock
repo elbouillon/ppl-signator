@@ -32,6 +32,7 @@ GEM
     activesupport (3.2.1)
       i18n (~> 0.6)
       multi_json (~> 1.0)
+    ansi (1.4.3)
     arel (3.0.2)
     builder (3.0.0)
     capistrano (2.11.2)
@@ -62,9 +63,6 @@ GEM
     hike (1.2.1)
     i18n (0.6.0)
     journey (1.0.3)
-    jquery-rails (2.0.0)
-      railties (>= 3.2.0.beta, < 5.0)
-      thor (~> 0.14)
     json (1.6.5)
     less (2.0.9)
       commonjs (~> 0.2.0)
@@ -80,6 +78,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.17.2)
+    minitest (4.2.0)
     multi_json (1.1.0)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -141,6 +140,8 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     ttfunk (1.0.3)
+    turn (0.9.6)
+      ansi
     tzinfo (0.3.31)
     uglifier (1.2.3)
       execjs (>= 0.3.0)
@@ -154,10 +155,11 @@ DEPENDENCIES
   capistrano
   coffee-rails (~> 3.2.1)
   haml-rails
-  jquery-rails
   less-rails-bootstrap (~> 2.0.6)
+  minitest
   prawn
   rails (= 3.2.1)
   sass-rails (~> 3.2.3)
   simple_form (~> 2.0.1)
+  turn
   uglifier (>= 1.0.3)
