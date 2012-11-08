@@ -26,13 +26,13 @@ class OrderFile
       pdf.go_to_page(pdf.page_count)
       pdf.font_size 16
 
-      pdf.move_down 20.cm
+      pdf.move_down 24.cm
 
       pdf.text "Bon pour accord de fabrication"
       pdf.text "Panorama Profil line SA"
       pdf.text "La Sarraz, le #{I18n.l(Date.today, format: :long)} - #{signator}"
 
-      pdf.move_down 1.cm
+      pdf.move_down 5.mm
 
       pdf.fill_color "D3482D"
       pdf.font_size(20){
@@ -53,7 +53,15 @@ class OrderFile
 
   def filename
     n = /(\d{2}\-\w*)|(\d{7})/.match(name)
-    "#{n}-confirmation".parameterize + ".pdf"
+    "#{n}-LW#{OrderFile.weeknb(delivery_date.to_date).sub(/\./, "")}-confirmation".parameterize + ".pdf"
+  end
+
+  def self.display_name_from_date(date)
+    "#{self.weeknb(date)} (#{I18n.l(date.beginning_of_week, format: :short)} - #{I18n.l(date.beginning_of_week+4, format: :short)})"
+  end
+
+  def self.weeknb(date)
+    "#{date.year.to_s.last(2)}.#{'%02d' % date.cweek}"
   end
 
   private

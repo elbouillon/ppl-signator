@@ -8,6 +8,6 @@ module ApplicationHelper
   end
 
   def return_display_name_from_date(date)
-    "#{date.year.to_s.last(2)}.#{'%02d' % date.cweek} (#{ActionController::Base.helpers.l(date.beginning_of_week, format: :short)} - #{ActionController::Base.helpers.l(date.beginning_of_week+4, format: :short)})"
+    OrderFile.display_name_from_date(date)
   end
 end
