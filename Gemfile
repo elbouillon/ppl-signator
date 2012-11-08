@@ -14,12 +14,17 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer'
+  gem 'therubyracer'
 
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+group :test do
+  gem 'minitest'
+  gem 'turn'
+end
+
+#gem 'jquery-rails'
 
 gem 'simple_form', '~> 2.0.1'
 gem 'haml-rails'
