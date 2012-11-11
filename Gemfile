@@ -27,7 +27,7 @@ end
 #gem 'jquery-rails'
 
 gem 'simple_form', '~> 2.0.1'
-gem 'haml-rails', group: :developpment
+gem 'haml-rails'
 gem 'less-rails-bootstrap', '~> 2.0.6'
 gem 'active_attr'
 gem 'prawn'
