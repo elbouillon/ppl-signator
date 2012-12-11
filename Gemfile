@@ -2,11 +2,6 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.1'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -14,33 +9,23 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer'
+  gem 'therubyracer'
 
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+group :test do
+  gem 'minitest'
+  gem 'turn'
+end
+
+#gem 'jquery-rails'
 
 gem 'simple_form', '~> 2.0.1'
 gem 'haml-rails'
-gem 'less-rails-bootstrap', '~> 2.0.6'
+gem 'less-rails-bootstrap'
 gem 'active_attr'
 gem 'prawn'
-gem 'capistrano'
+#gem 'capistrano'
 
 gem "letter_opener", :group => :development
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the web server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'ruby-debug19', :require => 'ruby-debug'
