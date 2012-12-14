@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-
-ruby '1.9.3' #required for heroku
+#required for heroku
+ruby '1.9.3'
 gem 'rails', '3.2.1'
 
 # Bundle edge Rails instead:
