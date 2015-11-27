@@ -6,7 +6,8 @@ class OrderFile
 
   SIGNATORS = {
   "André Kurmann" => "André Kurmann",
-  "Mickael Kurmann" => "Mickael Kurmann"
+  "Mickael Kurmann" => "Mickael Kurmann",
+  "Olivier Zbinden" => "Olivier Zbinden"
   }
 
   attribute :signator
