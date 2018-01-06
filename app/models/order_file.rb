@@ -8,7 +8,6 @@ class OrderFile
   "André Kurmann" => "André Kurmann",
   "Mickael Kurmann" => "Mickael Kurmann",
   "Olivier Zbinden" => "Olivier Zbinden",
-  "Yvan Morel" => "Yvan Morel"
   }
 
   attribute :signator
