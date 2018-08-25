@@ -7,9 +7,6 @@ gem 'rails', '3.2.1'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-
-gem 'newrelic_rpm'
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -26,8 +23,6 @@ group :test do
   gem 'minitest'
   gem 'turn'
 end
-
-#gem 'jquery-rails'
 
 gem 'simple_form', '~> 2.0.1'
 gem 'haml-rails'
