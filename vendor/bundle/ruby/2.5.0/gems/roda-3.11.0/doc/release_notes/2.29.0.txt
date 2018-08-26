@@ -1,0 +1,156 @@
+= Deprecated Features
+
+Roda 2.29.0 will be the last minor release of Roda 2.  Roda 3.0.0
+will be released next month and will remove support for the following
+deprecated features.  All of these features will have deprecation
+warnings if used in Roda 2.29.0.
+
+* The use of placeholders in string matchers is now deprecated.
+  So code such as:
+
+    r.get "users/:user_id" do |id|
+    end
+
+  should be switched to using a class matcher such as String or
+  Integer:
+
+    r.get "users", Integer do |id|
+    end
+
+  or a symbol matcher:
+
+    r.get "users", :user_id do |id|
+    end
+
+  If you really want to keep support for placeholders in string
+  matchers, the support is available in the new
+  placeholder_string_matchers plugin.
+
+* The :format, :opt, and :optd default symbol matchers are now
+  deprecated in the symbol_matchers plugin.  These matchers
+  only made sense when placeholder string matchers are used,
+  which will no longer be the default behavior in Roda 3. These
+  methods can be defined manually if you are going to use the
+  placeholder_string_matchers plugin and still want to use
+  these symbol matchers:
+
+    symbol_matcher(:format, /(?:\.(\w+))?/)
+    symbol_matcher(:opt, /(?:\/([^\/]+))?/)
+    symbol_matcher(:optd, /(?:\/(\d+))?/)
+
+* Ignoring unsupported match block return values is now deprecated.
+  Doing so can hide errors and make debugging more difficult.  If you
+  get a deprecation warning related to this, just make sure the match
+  block returns nil or false to specify the match block return value
+  should be ignored.
+
+* Treating unsupported matchers as always matching is now deprecated.
+  Doing so can hide errors and make debugging more difficult. If you
+  get a deprecation warning related to this, switch the matcher to
+  true instead of an unsupported object.
+
+* The render plugin's handling of plugin level locals and merging of
+  template and layout locals is now deprecated.  Users of these
+  features should switch to the new render_locals plugin.
+
+* The view_options plugin's handling of per-branch view and layout
+  locals is now deprecated.  Users of these feature should switch to
+  the new branch_locals plugin.
+
+* The render plugin's support for Erubis escaping is now deprecated.
+  In Roda 3, the render plugin :escape option will use Erubi escaping.
+  Switch to using :escape=>:erubi temporarily to avoid the deprecation
+  warning.
+
+* Using the render plugin to render a template that is outside one of
+  the allowed paths is now deprecated unless the :check_paths option
+  has been set to false.  In Roda 3, the default behavior will change
+  to checking that template files are in one of the allowed paths.
+
+* The :ext option in the render plugin is now deprecated, users should
+  switch to using the :engine option, which has always had priority.
+
+* Using the :cache=>true option to the view/render method in the
+  render plugin is now deprecated if the :cache=>nil/false option
+  was given when loading the plugin.  In Roda 3, the default behavior
+  will change so that the :cache=>nil/false plugin option still
+  allows caching via the :cache=>true method option.  Users can use
+  the :explicit_cache=>true render plugin option instead of the
+  :cache=>nil render plugin option to work around the deprecation
+  warning.
+
+* Attempting to use multi_route while routing with a namespace that
+  hasn't yet been defined is now deprecated.  The previous behavior
+  was to ignore undefined namespaces, but that is more likely to
+  hide an error than be desired behavior.  In Roda 3, using an
+  undefined namespace will raise an error.
+
+* The streaming plugin's support for EventMachine is now deprecated,
+  as is related support for Stream#callback.  The streaming plugin
+  will be much simpler in Roda 3 by dropping this support.
+
+* Calling content_for in the content_for plugin multiple times with
+  the same argument is now deprecated unless the content_for
+  plugin :append option is used to specify behavior.  The default
+  behavior in Roda 3 will change to appending to the existing
+  content instead of overwriting the existing content.
+
+* The :host matcher in the header_matchers plugin is now deprecated
+  when using a regexp value unless the :host_matcher_captures app
+  option is used.  In Roda 3, the :host matcher will automatically
+  yield any regexp captures to the match block.
+
+* The :header matcher in the header_matchers plugin is now deprecated
+  unless the :header_matcher_prefix app option is used.  In Roda 3,
+  the :header matcher will always prefix the argument given with
+  HTTP_.
+
+* The websockets plugin is now deprecated.  It was one of the less
+  commonly used plugins, and the tests for it were subject to race
+  conditions and failed occassionally, and even when they worked
+  they almost doubled the testing time.  Anyone wanting to use it
+  should consider maintaining it as an external plugin.
+
+* The per_thread_caching, static_path_info, and view_subdirs
+  plugins are now deprecated.  static_path_info has been a no-op since
+  Roda 3, view_subdirs is just an alias for view_options, and
+  per_thread_caching doesn't change behavior and is unlikely to
+  significantly increase performance.
+
+* Additional internal constants are now deprecated. Deprecation
+  warnings for accessing these constants will only be displayed on
+  ruby 2.3+.
+
+= Forward Compatibility
+
+Roda 3.0.0 will also include some behavior changes which will not
+have deprecation warnings:
+
+* Ruby 1.8.7 support will be dropped.  Ruby 1.9.2 will be the new
+  minimum supported version.
+
+* Subclassing a Roda app that uses the render plugin will always
+  use a copy of the superclass's template cache.
+
+* The assets plugin will default to using subresource integrity
+  using SHA256 for compiled assets, and using SHA256 instead of
+  SHA1 for compiled asset hashes.
+
+* Using an Roda app as middleware will now always use a subclass
+  of the app for the middleware.
+
+* public_send will be used instead of send internally unless it is
+  expected that private methods will be called.
+
+* The match methods added by the symbol_matchers and hash_matchers
+  plugins will be private instead of public.
+
+= New Features
+
+* The render plugin now has the :layout_opts=>:views plugin option
+  respect the :root app option.
+
+* RodaPlugins::OPTS and RodaPlugins::EMPTY_ARRAY have been added.
+  These are a frozen empty hash and a frozen empty array, and
+  they are designed for use in plugins so that similar objects are
+  not needed to be defined separately in each plugin.

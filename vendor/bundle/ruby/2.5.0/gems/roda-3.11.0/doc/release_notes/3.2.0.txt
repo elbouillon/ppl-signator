@@ -1,0 +1,22 @@
+= New Features
+
+* A timestamp_public plugin has been added for serving static files
+  with paths that change based on the modification timestamp of the
+  file.  By using a new path, cached versions of the file will not
+  be used, fixing staleness issues.  Example:
+
+    plugin :timestamp_public
+
+    route do |r|
+      # serves requests for /static/\d+/.*
+      r.timestamp_public
+
+      # /static/1234567890/path/to/file
+      timestamp_path("path/to/file")
+    end
+
+= Other Improvements
+
+* When using the assets plugin :timestamp_paths option, the
+  timestamps now include microseconds, to make cache poisoning more
+  difficult.

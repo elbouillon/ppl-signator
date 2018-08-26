@@ -1,0 +1,17 @@
+= New Features
+
+* A status_303 plugin has been added, which changes the default
+  redirect status from 302 to 303 if the HTTP version is 1.1 and
+  the request is not a GET request.
+
+= Other Improvements
+
+* Roda is now optimized for ruby 2.3+ using frozen string literals
+  instead of constant references.  This improves performance on ruby
+  2.3+, and decreases performance on ruby <2.3.
+
+= Backwards Compatibility
+
+* Many now unused internal constants are now deprecated, and
+  attempting to access them will result in deprecation warnings
+  on ruby 2.3+.

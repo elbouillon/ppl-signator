@@ -1,0 +1,56 @@
+= New Features
+
+* String and Integer class matchers have been added.  The
+  String class matches any non-empty segment and yields it as a
+  string.  This is the same as the behavior of the symbol matchers,
+  but without the duplication.  So instead of:
+
+    r.is "album", :album_name do |album_name|
+    end
+
+  you can now do:
+
+    r.is "album", String do |album_name|
+    end
+
+  This makes it a bit more intuitive that you want to match
+  any string, and avoids the redundancy between the symbol
+  name and block argument name.
+
+  The Integer class matches any integer segment (\d+) and yields it
+  as an integer:
+
+    r.is "album", Integer do |album_id|
+      # does not match "/albums/foo"
+      # matches "/albums/1", yielding 1 (not "1")
+    end
+
+  Previously, the :d matcher in the symbol_matchers plugin could
+  be used to only match integer segments, but it yielded results
+  as strings and not integers, so you still needed to convert the
+  type manually.  Using Integer is a bit more intuitive than
+  using :d, and it handles the type conversion for you.
+
+* A class_matchers plugin has been added for matching additional
+  classes, with user-specified regexps and type conversion.  For
+  example, if you want to match YYYY-MM-DD segments and yield
+  them to the match blocks as ruby Date objects, you can do:
+
+    plugin :class_matchers
+
+    class_matcher(Date, /(\d\d\d\d)-(\d\d)-(\d\d)/) do |y, m, d|
+      [Date.new(y.to_i, m.to_i, d.to_i)]
+    end
+
+  and then in your routing tree, you can do:
+
+    r.on "posts", Date do |date|
+      # does not match "/posts/foo" or "/posts/2017-01"
+      # matches "/posts/2017-01-13", yielding Date.new(2017, 1, 13)
+    end
+
+= Backwards Compatibility
+
+* If you were using the Integer and String classes as matchers
+  before and expected them to always match, you'll need to
+  change your code to use true instead.

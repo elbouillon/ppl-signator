@@ -1,0 +1,27 @@
+= New Features
+
+* The convert_each! method in the typecast_params plugin now
+  accepts a Proc or Method value for the :keys option. The proc
+  or method is called with the current array or hash that
+  typecast params is operating on, and should return an
+  array of keys to use for the conversion.
+
+* The convert_each! method in the typecast_params plugin will
+  now automatically handle hashes with keys from '0'..'N',
+  without a :keys option being provided.
+  
+  This makes it possible to handle parameter names such as
+  foo[0][bar], foo[0][baz], foo[1][bar], and foo[1][baz], if you
+  want to avoid the issues related to rack's issues when parsing
+  array parameters.
+
+= Other Improvements
+
+* The Roda::RodaVersionNumber constant has been added for easier
+  version comparisons.  It is 30080 for version 3.8.0.
+
+= Backwards Compatibility
+
+* When an unsupported type is given as value of the :keys option
+  to the convert_each! method in the typecast_params plugin, a
+  ProgrammerError exception is now raised.

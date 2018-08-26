@@ -1,0 +1,123 @@
+= New Features
+
+* A content_security_policy plugin has been added for setting up an
+  appropriate Content-Security-Policy header.  To configure the
+  default policy, load the plugin with a block:
+
+    plugin :content_security_policy do |csp|
+      csp.default_src :none
+      csp.img_src :self
+      csp.style_src :self, 'fonts.googleapis.com'
+      csp.script_src :self
+      csp.font_src :self, 'fonts.gstatic.com'
+      csp.form_action :self
+      csp.base_uri :none
+      csp.frame_ancestors :none
+      csp.block_all_mixed_content
+    end
+
+  It's recommended that use use a default_src of :none at the top
+  of the policy, then explicitly change other settings (e.g. img_src)
+  when you want to allow content.
+
+  Anywhere in the routing tree, you can use the content_security_policy
+  method to override the default policy.  You can pass this method a
+  block:
+
+    r.get 'foo' do
+      content_security_policy do |csp|
+        csp.object_src :self
+        csp.add_style_src 'bar.com'
+      end
+      # ...
+    end
+
+  Or just call a method on it:
+
+    r.get 'foo' do
+      content_security_policy.script_src :self, 'example.com', [:nonce, 'foobarbaz']
+      # ...
+    end
+
+  The following methods exist for configuring the content security policy, they set
+  the appropriate directive, with the underscores replaced by a dash.
+  
+  * base_uri
+  * child_src
+  * connect_src
+  * default_src
+  * font_src
+  * form_action
+  * frame_ancestors
+  * frame_src
+  * img_src
+  * manifest_src
+  * media_src
+  * object_src
+  * plugin_types
+  * report_uri
+  * require_sri_for
+  * sandbox
+  * script_src
+  * style_src
+  * worker_src
+
+  All of these methods support any number of arguments, and each argument
+  should be one of the following types:
+  
+  String :: used verbatim
+  Symbol :: Substitutes underscore with dash and surrounds with single
+            quotes
+  Array :: only accepts 2 element arrays, joins elements with a dash
+           and surrounds them with single quotes
+ 
+  Example:
+  
+    content_security_policy.script_src :self, :unsafe_eval,
+      'example.com', [:nonce, 'foobarbaz']
+    # script-src 'self' 'unsafe-eval' example.com 'nonce-foobarbaz'; 
+   
+  When calling a method with no arguments, the setting is removed from
+  the policy instead of being left empty, since all of these setting
+  require at least one value.  Likewise, if the policy does not have
+  any settings, the header will not be added.
+
+  Calling the method overrides any previous setting.  Each of the
+  methods has a add_* method (e.g. add_script_src) for appending to the
+  current setting, and a get_* method (e.g. get_script_src) for
+  retrieving the current value of the setting, or nil if it is not
+  defined.
+
+    content_security_policy.script_src :self, :unsafe_eval
+    # script-src 'self' 'unsafe-eval'; 
+    content_security_policy.add_script_src 'example.com', [:nonce, 'foobarbaz']
+    # script-src 'self' 'unsafe-eval' example.com 'nonce-foobarbaz'; 
+  
+    content_security_policy.get_script_src 'example.com', [:nonce, 'foobarbaz']
+    # => [:self, :unsafe_eval, 'example.com', [:nonce, 'foobarbaz']]
+
+  The clear method can be used to remove all settings from the policy.
+  
+  The following methods to set boolean directives are also defined:
+ 
+  * block_all_mixed_content
+  * upgrade_insecure_requests
+ 
+  Calling these methods will turn on the related setting.  To turn the
+  setting off again, you can call them with a false argument (e.g.
+  block_all_mixed_content(false)).  Each method also an *? method
+  (e.g. block_all_mixed_content?) for returning whether the setting is
+  currently enabled.
+  
+  Likewise there is also a report_only method for turning on report
+  only mode (the default is enforcement mode), or turning off report
+  only mode if a false argument is given.  Also, there is a
+  report_only? method for returning whether report only mode is
+  enabled. In report only mode, the Content-Security-Policy-Report-Only
+  header is used.
+
+= Other Improvements
+
+* The response_request plugin now integrates with the error_handler and
+  class_level_routing plugins.  Those plugins now reinitialize the
+  current response object instead of creating a new response object.

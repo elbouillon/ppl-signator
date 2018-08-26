@@ -1,0 +1,84 @@
+= Major Changes
+
+* String matchers now match literally by default, for simplicity,
+  understandability, and performance.  Use the String class matcher
+  or a symbol matcher to match arbitrary segments.
+
+    # Before
+    r.is "artists/:name" do |artist_name|
+    end
+
+    # Now
+    r.is "artists", String do |artist_name|
+    end
+    # or
+    r.is "artists", :name do |artist_name|
+    end
+
+  You can use the placeholder_string_matchers plugin to restore
+  the historical behavior if you don't want to modify your
+  routes.
+
+* Using an unsupported matcher now raises an error, making it
+  more likely to detect using a unexpected value as a matcher
+  (which previously matched everything).
+
+* Have a route/match block return an unsupported value now
+  raises an error if nothing has been written to the body, making
+  it more likely to detect using an unexpected value as a block
+  result (which previously was ignored).
+
+= Backwards Compatibility
+
+* Deprecated plugins, features, and constants have been removed.
+  Before upgrading to 3.0.0, please upgrade to 2.29.0 first and
+  fix any deprecation warnings.
+
+* Ruby 1.8.7 support has been dropped.  Ruby 1.9.2 is the new
+  minimum supported version.
+
+* The :check_paths render plugin option now defaults to true so that
+  generated template paths are checked by default, reducing the risk
+  of rendering arbitrary files.
+
+* The assets plugin now defaults to using subresource integrity
+  with SHA256 for compiled assets, and using SHA256 instead of
+  SHA1 for compiled asset hashes.
+
+* Subclassing a Roda app that uses the render plugin now always
+  uses a copy of the superclass's template cache.
+
+* Using a Roda app as middleware now always uses a subclass
+  of the app for the middleware.
+
+* public_send is now used instead of send internally unless it is
+  expected that private methods will be called.
+
+* The match methods added by the symbol_matchers and hash_matchers
+  plugins are now private instead of public.
+
+= Other Improvements
+
+* The streaming plugin has been greatly simplified, by dropping
+  deprecated compatibility for EventMachine.
+
+* It is now possible to reset the :include_request option to false
+  in the json and json_parser plugins by loading the plugin a
+  second time with the option set.
+
+* The precompile_templates plugin now always sorts locals.  This
+  plugin should now be used with Tilt 2.0.1+ (which also sorts
+  locals), though it will still work with earlier Tilt versions.
+
+* The multi_run plugin now recomputes the regexp when freezing the
+  app.
+
+= Deprecated Features
+
+These features will be removed in Roda 3.1.0:
+
+* Roda.thread_safe_cache is now deprecated.  RodaCache is now used
+  as the thread-safe cache class.
+
+* RodaRequest#placeholder_string_matcher? (private method) is now
+  deprecated and always returns false.

@@ -1,0 +1,132 @@
+= New Features
+
+* A sessions plugin has been added that supports encrypted and
+  signed sessions. This plugin is now the recommended way to
+  implement sessions, replacing the previously recommended
+  Rack::Session::Cookie middleware.
+
+  The sessions plugin encrypts session data using the AES-256-CTR
+  cipher, and then signs the encrypted data with HMAC-SHA-256. By
+  doing this, attackers must be able to forge a valid HMAC before
+  they can try to exploit possible weaknesses in the encryption,
+  such as timing attacks during decryption that are dependent on
+  attacker chosen initialization vectors or ciphertext.
+
+  In addition to encryption and a stronger default signature
+  algorithm compared to Rack::Session::Cookie, the sessions
+  plugin has the following benefits:
+
+  * Built in session expiration enabeld by default, to mitigate
+    possible session replay issues (default: 30 days since session
+    creation, 7 days since last update).
+
+  * Padding by default to minimize information leakage due to
+    differing session data sizes (session data padded to
+    a multiple of 32 bytes by default before encryption).
+
+  * Automatic deflate compression of large sessions before
+    encryption (by default if session data is over 128 bytes).
+
+  * JSON is used for serialization instead of Marshal, preventing
+    remote code execution vulnerabilities if the session secret
+    is disclosed. Note that this means that many ruby types do not
+    round trip in the session, such as Symbol and Time instances.
+    This will probably be the largest barrier to adoption, as you
+    need to make sure your application only uses types that
+    round-trip through JSON before you start using the sessions
+    plugin.
+
+  * A plain hash is used for the session, instead of a hash-like
+    object. One consequence of this is that keys in the session
+    are not automatically converted to strings.
+    Rack::Session::Cookie converts session keys to strings for
+    keys at the top level, but not for keys in subhashes.
+
+  * In general sessions are smaller even if deflate compression is not
+    used, despite requiring 16 bytes for the cipher initialization
+    vector. The main reason for this is that the sessions plugin does
+    not set a session id, since one is not needed for cookie sessions.
+
+  * The sessions plugin requires a :secret option be set that is
+    at least 64 bytes, so that users have to make a determined
+    effort to use weak secrets.
+
+  * The HMAC calculation considers the cookie key, so that if the
+    same session secret is used for multiple applications with
+    different cookie keys, an attacker cannot use the session from
+    one application in a different application.
+
+  The sessions plugin ties into the Roda#session method instead
+  of being a rack middleware.  This makes it about twice as
+  fast as Rack::Session::Cookie if the session is not accessed.
+  If the session is accessed, the sessions plugin is roughly
+  as fast as Rack::Session::Cookie, even though it uses a
+  stronger HMAC and has to encrypt and decrypt the session.
+
+  Because the sessions plugin is not a middleware, it does not
+  offer session support to other middleware, only to the app
+  itself.  If you would like to use the same approach as the
+  sessions plugin uses but would like support for middleware to
+  access the sessions, a roda/session_middleware file has been
+  added. This file contains RodaSessionMiddleware, which is a
+  middleware that can be used by any other Rack app for session
+  support, and which uses a SessionHash class similar to the one used
+  by Rack::Session::Cookie.
+
+  To integrate with other plugins that can optionally use symbols
+  or strings in sessions, the sessions plugin sets the
+  :sessions_convert_symbols application option to true.  Other plugins
+  can check for this application option, and if set, should use
+  strings instead of symbols in the session.
+
+  The sessions plugin should be loaded after the flash plugin if both
+  are used in the same application, so that the flash is rotated
+  correctly in the session.
+
+* The middleware plugin now supports a :handle_result option, which
+  can be any callable object.  If set, this object is called with the
+  environment of the request and the rack response after either the
+  Roda app or next middleware returns the rack response.  The rack
+  response can be modified by the callable object, and the response
+  (after possible modification) will be returned to the previous
+  middleware.  Example:
+
+    plugin :middleware, :handle_result=>(proc do |env, res|
+      res[1]['MyHeader'] = 'HeaderValue'
+    end)
+
+* The :json_parser and :json_serializer application options are now
+  supported.  If set, these options are used for parsing and
+  serializing JSON instead of the default of JSON.parse and .to_json.
+
+= Other Improvements
+
+* RodaRequest initialization is now faster by avoiding 1-2 method
+  calls.
+
+* typecast_params.Integer in the typecast_params plugin now handles
+  numeric input as long the numeric input does not have fractional
+  parts.  This makes it more usable when handling JSON input.
+
+* If the flash is empty after the request is processed, the flash
+  session key is removed from the session instead of being left as
+  an empty hash.  If addition to making the session smaller, this
+  makes the session appear empty if there are no other keys in the
+  session, which works better with the sessions plugin as empty
+  sessions will remove the session cookie completely.
+
+= Backwards Compatibility
+
+* The flash plugin now uses '_flash' instead of :_flash as the session
+  key.  When using session middleware that uses
+  Rack::Session::Abstract::SessionHash to store the session (e.g.
+  Rack::Session::Cookie), session keys are converted internally to
+  strings, so this change will not affect you unless you are using
+  alternative session support.  Even if your session does treat
+  :_flash different than '_flash' in keys, the plugin will still work
+  because it will try :_flash if there is no value for '_flash'.  This
+  change was made to support the sessions plugin, which doesn't
+  convert keys to strings.
+
+* This DEFAULT_PARSER and DEFAULT_SERIALIZER constants from the
+  the json_parser and json plugins have been removed.

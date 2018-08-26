@@ -1,0 +1,24 @@
+= New Features
+
+* A middleware_stack plugin has been added for more detailed control
+  over middleware, allowing for the removal of middleware and the
+  insertion of middleware before existing middleware.  Example:
+
+    plugin :middleware_stack
+
+    # Remove csrf middleware
+    middleware_stack.remove{|m, *args| m == Rack::Csrf}
+
+    # Insert csrf middleware before logger middleware
+    middleware_stack.before{|m, *args| m == Rack::CommonLogger}.
+      use(Rack::Csrf, raise: true)
+
+    # Insert csrf middleware after logger middleware
+    middleware_stack.after{|m, *args| m == Rack::CommonLogger}.
+      use(Rack::Csrf, raise: true)
+
+= Other Improvements
+
+* The head plugin now calls close on the response body if the body
+  responds to close.  Previously an existing response body was
+  just ignored.
