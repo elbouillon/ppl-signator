@@ -1,0 +1,1 @@
+web: rerun --ignore 'public/*' -- rackup --port 4500 config.ru
