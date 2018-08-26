@@ -1,5 +1,0 @@
-require 'core_ext/date_time/acts_like'
-require 'core_ext/date_time/blank'
-require 'core_ext/date_time/calculations'
-require 'core_ext/date_time/conversions'
-require 'core_ext/date_time/zones'
