@@ -13,6 +13,9 @@ gem "trailblazer-cells"
 gem "trailblazer-loader"
 gem "cells-slim"
 gem "formular"
+# gestion des pdf
+gem 'prawn'
+gem 'combine_pdf'
 
 # process and dev
 group :development do

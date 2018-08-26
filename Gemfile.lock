@@ -11,6 +11,8 @@ GEM
     cells-slim (0.0.6)
       cells (>= 4.0.1, < 6.0.0)
       slim (~> 3.0)
+    combine_pdf (1.0.15)
+      ruby-rc4 (>= 0.1.5)
     concurrent-ruby (1.0.5)
     core_ext (0.0.6)
       bigdecimal (~> 1.2)
@@ -38,6 +40,10 @@ GEM
       rb-inotify (~> 0.9, >= 0.9.7)
       ruby_dep (~> 1.2)
     method_source (0.9.0)
+    pdf-core (0.7.0)
+    prawn (2.2.2)
+      pdf-core (~> 0.7.0)
+      ttfunk (~> 1.5)
     rack (2.0.5)
     rack_csrf (2.6.0)
       rack (>= 1.1.0)
@@ -48,6 +54,7 @@ GEM
       listen (~> 3.0)
     roda (3.11.0)
       rack
+    ruby-rc4 (0.1.5)
     ruby_dep (1.5.0)
     slim (3.0.9)
       temple (>= 0.7.6, < 0.9)
@@ -59,6 +66,7 @@ GEM
     trailblazer-cells (0.0.3)
       cells (>= 4.1.0.rc1, < 5.0.0)
     trailblazer-loader (0.1.2)
+    ttfunk (1.5.1)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uber (0.1.0)
@@ -69,9 +77,11 @@ PLATFORMS
 DEPENDENCIES
   bundler
   cells-slim
+  combine_pdf
   core_ext
   foreman
   formular
+  prawn
   rack_csrf
   rerun
   roda

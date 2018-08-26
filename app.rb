@@ -1,4 +1,5 @@
 require(File.expand_path('trailblazer-config', File.dirname(__FILE__)))
+require_relative 'signator'
 require 'roda'
 
 class PplSignator < Roda
@@ -17,7 +18,7 @@ class PplSignator < Roda
     #:secure=>!TEST_MODE, # Uncomment if only allowing https:// access
     :secret=> secret
 
-  plugin :csrf
+  plugin :route_csrf
   plugin :public
 
   route do |r|
@@ -28,11 +29,10 @@ class PplSignator < Roda
     end
 
     r.post 'pdf/sign' do |year|
-      # @order_file = OrderFile.new(params[:order_file])
-      # send_data @order_file.render_file, 
-      #   filename: @order_file.filename,
-      #   type: "application/pdf"
-      'super pdf signe'
+      response['Content-Type'] = 'application/pdf'
+      response['Content-Disposition'] = "attachment; filename=#{Signator.confirmation_name(r.params['pdf_to_sign'][:filename], r.params['delivery_date'])}"
+      Signator.new.(r.params)
     end
+
   end
 end
