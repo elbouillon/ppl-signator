@@ -20,6 +20,11 @@ class PplSignator < Roda
 
   plugin :route_csrf
   plugin :public
+  # plugin :status_handler
+
+  # status_handler(404) do
+  #   route.redirect :root
+  # end
 
   route do |r|
     r.public
@@ -29,9 +34,15 @@ class PplSignator < Roda
     end
 
     r.post 'pdf/sign' do |year|
+      r.redirect '/' if r.params['pdf_to_sign'] == nil
+
       response['Content-Type'] = 'application/pdf'
       response['Content-Disposition'] = "attachment; filename=#{Signator.confirmation_name(r.params['pdf_to_sign'][:filename], r.params['delivery_date'])}"
       Signator.new.(r.params)
+    end
+
+    r.on do
+      r.redirect '/'
     end
 
   end
