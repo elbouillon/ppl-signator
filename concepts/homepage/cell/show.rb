@@ -20,15 +20,12 @@ module Homepage
       end
 
       def return_display_name_from_date(date)
-        "#{self.weeknb(date)} (#{short_day(date.beginning_of_week)} - #{short_day(date.beginning_of_week+4)})"
-      end
-
-      def short_day(date)
-        date.strftime('%d.%m')
-      end
-
-      def weeknb(date)
-        "#{date.year.to_s.last(2)}.#{'%02d' % date.cweek}"
+        date = date.to_date
+        weeknb = date.strftime('%y.%W')
+        weekstart_date = date.beginning_of_week
+        weekstart = weekstart_date.strftime('%d.%m')
+        weekend = (weekstart_date+4).strftime('%d.%m')
+        "#{weeknb} (#{weekstart}-#{weekend})"
       end
     end
   end
