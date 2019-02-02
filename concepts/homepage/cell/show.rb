@@ -21,10 +21,10 @@ module Homepage
 
       def return_display_name_from_date(date)
         date = date.to_date
-        weeknb = date.strftime('%y.%W')
-        weekstart_date = date.beginning_of_week
-        weekstart = weekstart_date.strftime('%d.%m')
-        weekend = (weekstart_date+4).strftime('%d.%m')
+        weeknb = date.strftime('%g.%V')
+        # weekstart_date = date.beginning_of_week
+        weekstart = date.strftime('%d.%m')
+        weekend = (date+5).strftime('%d.%m')
         "#{weeknb} (#{weekstart}-#{weekend})"
       end
     end
