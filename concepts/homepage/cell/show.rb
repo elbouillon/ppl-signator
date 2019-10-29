@@ -8,7 +8,7 @@ module Homepage
       Formular::Helper.builder= :bootstrap4
 
       def signators
-        [['Mickael', 'Mickael Kurmann'], ['André', 'Andre Kurmann']]
+        [['Mickael', 'Mickael Kurmann'], ['André', 'Andre Kurmann'], ['Vitor', 'Vitor Da Rocha']]
       end
 
       def dates(nb_of_weeks: 15)
