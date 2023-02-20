@@ -1,5 +1,4 @@
 Encoding.default_external = Encoding::UTF_8
-# Encoding.default_internal = Encoding::UTF_8
 
 require(File.expand_path('trailblazer-config', File.dirname(__FILE__)))
 require_relative 'signator'
@@ -7,19 +6,19 @@ require 'roda'
 
 class PplSignator < Roda
   plugin :default_headers,
-    'Content-Type'=>'text/html',
-    # 'Content-Security-Policy'=>"default-src 'self' https://oss.maxcdn.com/ https://maxcdn.bootstrapcdn.com https://ajax.googleapis.com",
-    #'Strict-Transport-Security'=>'max-age=16070400;', # Uncomment if only allowing https:// access
-    'X-Frame-Options'=>'deny',
-    'X-Content-Type-Options'=>'nosniff',
-    'X-XSS-Protection'=>'1; mode=block',
-    'Accept-Charset'=>'utf-8'
+         'Content-Type' => 'text/html',
+         # 'Content-Security-Policy'=>"default-src 'self' https://oss.maxcdn.com/ https://maxcdn.bootstrapcdn.com https://ajax.googleapis.com",
+         # 'Strict-Transport-Security'=>'max-age=16070400;', # Uncomment if only allowing https:// access
+         'X-Frame-Options' => 'deny',
+         'X-Content-Type-Options' => 'nosniff',
+         'X-XSS-Protection' => '1; mode=block',
+         'Accept-Charset' => 'utf-8'
 
   secret = ENV['SESSION_SECRET'] || 'lkjasdfsaflkjdsajfldsajflkdsafj'
   use Rack::Session::Cookie,
-    :key => '_PplSignator_session',
-    #:secure=>!TEST_MODE, # Uncomment if only allowing https:// access
-    :secret=> secret
+      key: '_PplSignator_session',
+      # :secure=>!TEST_MODE, # Uncomment if only allowing https:// access
+      secret: secret
 
   plugin :route_csrf
   plugin :public
@@ -33,20 +32,21 @@ class PplSignator < Roda
     r.public
 
     r.root do
-      Homepage::Cell::Show.(nil).()
+      Homepage::Cell::Show.call(nil).call
     end
 
-    r.post 'pdf/sign' do |year|
-      r.redirect '/' if r.params['pdf_to_sign'] == nil
+    r.post 'pdf/sign' do |_year|
+      r.redirect '/' if r.params['pdf_to_sign'].nil?
 
       response['Content-Type'] = 'application/pdf'
-      response['Content-Disposition'] = "attachment; filename=#{Signator.confirmation_name(r.params['pdf_to_sign'][:filename], r.params['delivery_date'])}"
-      Signator.new.(r.params)
+      response['Content-Disposition'] =
+        "attachment; filename=#{Signator.confirmation_name(r.params['pdf_to_sign'][:filename],
+                                                           r.params['delivery_date'])}"
+      Signator.new.call(r.params)
     end
 
     r.on do
       r.redirect '/'
     end
-
   end
 end
