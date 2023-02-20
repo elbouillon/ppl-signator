@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ruby '2.7.1'
 
 source 'https://rubygems.org'
@@ -8,17 +10,17 @@ gem 'bundler'
 gem 'rack_csrf'
 gem 'roda'
 # code and application
-gem "core_ext"
-gem "trailblazer-cells"
-gem "trailblazer-loader"
-gem "cells-slim"
-gem "formular"
+gem 'cells-slim'
+gem 'core_ext'
+gem 'formular'
+gem 'trailblazer-cells'
+gem 'trailblazer-loader'
 # gestion des pdf
-gem 'prawn'
 gem 'combine_pdf'
+gem 'prawn'
 
 # process and dev
 group :development do
-  gem "foreman"
-  gem "rerun"
+  gem 'foreman'
+  gem 'rerun'
 end
