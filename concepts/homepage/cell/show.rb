@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'core_ext/time'
 require 'formular'
 
@@ -8,7 +10,8 @@ module Homepage
       Formular::Helper.builder = :bootstrap4
 
       def signators
-        [['Mickael', 'Mickael Kurmann'], ['André', 'Andre Kurmann'], ['Vitor', 'Vitor Da Rocha'], ['David', 'David Pinto']]
+        [['Mickael', 'Mickael Kurmann'], ['André', 'Andre Kurmann'], ['Vitor', 'Vitor Da Rocha'],
+         ['JX', 'Jean-Xavier Porikian']]
       end
 
       def dates(nb_of_weeks: 15)
