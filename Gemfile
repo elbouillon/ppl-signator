@@ -10,11 +10,9 @@ gem 'bundler'
 gem 'rack_csrf'
 gem 'roda'
 # code and application
-gem 'cells-slim'
 gem 'core_ext'
 gem 'formular'
-gem 'trailblazer-cells'
-gem 'trailblazer-loader'
+gem 'haml'
 # gestion des pdf
 gem 'combine_pdf'
 gem 'prawn'

@@ -1,7 +1,7 @@
-Encoding.default_external = Encoding::UTF_8
+# frozen_string_literal: true
 
-require(File.expand_path('trailblazer-config', File.dirname(__FILE__)))
 require_relative 'signator'
+require_relative 'views/helpers'
 require 'roda'
 
 class PplSignator < Roda
@@ -14,25 +14,14 @@ class PplSignator < Roda
          'X-XSS-Protection' => '1; mode=block',
          'Accept-Charset' => 'utf-8'
 
-  secret = ENV['SESSION_SECRET'] || 'lkjasdfsaflkjdsajfldsajflkdsafj'
-  use Rack::Session::Cookie,
-      key: '_PplSignator_session',
-      # :secure=>!TEST_MODE, # Uncomment if only allowing https:// access
-      secret: secret
-
-  plugin :route_csrf
   plugin :public
-  # plugin :status_handler
-
-  # status_handler(404) do
-  #   route.redirect :root
-  # end
+  plugin :render, engine: 'haml'
 
   route do |r|
     r.public
 
     r.root do
-      Homepage::Cell::Show.call(nil).call
+      render :show
     end
 
     r.post 'pdf/sign' do |_year|

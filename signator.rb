@@ -34,7 +34,7 @@ class Signator
   end
 
   def self.confirmation_date(delivery_date)
-    "LW#{delivery_date.to_date.strftime('%g.%V')}"
+    "LW#{Date.parse(delivery_date).strftime('%g.%V')}"
   end
 
   def self.confirmation_name(filename, delivery_date)

@@ -1,0 +1,42 @@
+!!!
+%html{lang: 'fr'}
+  %head
+    %meta{name:"viewport", content:"width=device-width, initial-scale=1, shrink-to-fit=no"}
+    %meta{charset:"UTF-8"}
+    %title PPl Signator - Tu signes ou tu t'en vas!
+    %link{href:'bootstrap.min.css', rel:'stylesheet', type:'text/css'}
+    %link{rel:"icon", href:"favicon.ico", type:"image/x-icon"}
+
+  %body
+    .container
+      %h1.mt-5
+        Signer un PDF
+        %small.text-muted.ml-2 Tu signes ou tu t'en vas
+      #main
+        .alert.alert-info
+          %strong Comment ça marche ?
+          C'est tout simple. Prenez votre PDF et envoyez le moi, je vous le retourne avec une belle signature!
+
+        %form{action: 'pdf/sign', enctype: 'multipart/form-data', method: 'post'}
+          .row.mb-2
+            .col
+              %fieldset.form-group
+                %label.form-control-label{for:"pdf_to_sign"} PDF à signer
+                %input#pdf_to_sign.form-control-file{type:"file", accept:".pdf", name:"pdf_to_sign"}
+            .col.border-left.border-right
+              %fieldset.form-group
+                %label.form-control-label{for:"signator"} Signataire
+                %select#signator.form-control{name: 'signator'}
+                  - Helpers.signators.each do |val,name|
+                    %option{value: val}= name
+            .col
+              %fieldset.form-group
+                %label.form-control-label{for:"delivery_date"} Livraison
+                %select#delivery_date.form-control{name: 'delivery_date'}
+                  - Helpers.dates.each do |name,val|
+                    %option{value: val}= name
+          %button.btn.btn-outline-primary.btn-block.btn-lg{type:'submit'}
+            Merci de me signer le PDF
+
+      #footer.fixed-bottom.text-center.text-muted
+        Made with love by Mickael
