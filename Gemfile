@@ -10,11 +10,13 @@ gem 'roda'
 # code and application
 gem 'haml'
 # gestion des pdf
-gem 'combine_pdf'
-gem 'prawn'
 
 # process and dev
 group :development do
   gem 'foreman'
   gem 'rerun'
+end
+
+group :test do
+  gem 'rspec', '~> 3.12'
 end
