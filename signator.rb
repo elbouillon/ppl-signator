@@ -1,36 +1,38 @@
-require 'prawn'
-require 'combine_pdf'
+# frozen_string_literal: true
+
+require 'hexapdf'
 
 class Signator
   def call(params)
     file = params['pdf_to_sign'][:tempfile]
 
-    # CREER la SIGNATURE
-    signature = Prawn::Document.new do |pdf|
-      require 'prawn/measurement_extensions'
-      pdf.font_size 13
+    filename = File.join(File.dirname(__FILE__), 'accord_fabrication.pdf')
 
-      pdf.move_down 22.cm
+    doc = HexaPDF::Document.open(file.path)
 
-      pdf.text 'Bon pour accord de fabrication'
-      pdf.text 'Panorama Profil line SA'
-      pdf.text "La Sarraz, le #{Date.today.strftime('%d.%m.%Y')} - #{params.fetch('signator')}"
+    canvas = doc.pages[-1].canvas(type: :overlay)
 
-      pdf.move_down 5.mm
+    box = HexaPDF::Layout::Box.create(
+      width: 400, height: 80, content_box: true,
+      border: { width: 4, style: :solid },
+      background_color: [189, 231, 0]
+    )
 
-      pdf.fill_color 'D3482D'
-      pdf.font_size(20) do
-        # pdf.text "Date de livraison : #{return_display_name_from_date(delivery_date.to_date)}"
-        pdf.text "Semaine de livraison : #{Signator.confirmation_date(params.fetch('delivery_date'))}"
-      end
-    end.render
+    box.draw(canvas, 20, 20)
 
-    company_logo = CombinePDF.parse(signature).pages[0]
-    # lire le pdf uploade
-    pdf = CombinePDF.load file.path
-    # merger le tout et retour
-    pdf.pages.last << company_logo
-    pdf.to_pdf
+    canvas.font('Helvetica', variant: :bold, size: 16)
+    canvas.text 'Bon pour accord de fabrication', at: [40, 80]
+    canvas.font('Helvetica', size: 13)
+    canvas.text 'Panorama Profil line SA', at: [40, 60]
+    canvas.text "La Sarraz, le #{Date.today.strftime('%d.%m.%Y')} - #{params.fetch('signator')}", at: [40, 40]
+    #   pdf.font_size(20) do
+    #     # pdf.text "Date de livraison : #{return_display_name_from_date(delivery_date.to_date)}"
+    #     pdf.text "Semaine de livraison : #{Signator.confirmation_date(params.fetch('delivery_date'))}"
+    #   end
+
+    doc.write(filename, optimize: true)
+
+    filename
   end
 
   def self.confirmation_date(delivery_date)

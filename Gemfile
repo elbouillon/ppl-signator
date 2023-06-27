@@ -10,6 +10,7 @@ gem 'roda'
 # code and application
 gem 'haml'
 # gestion des pdf
+gem 'hexapdf'
 
 # process and dev
 group :development do

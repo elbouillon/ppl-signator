@@ -16,6 +16,7 @@ class PplSignator < Roda
 
   plugin :public
   plugin :render, engine: 'haml'
+  plugin :sinatra_helpers
 
   route do |r|
     r.public
@@ -24,14 +25,22 @@ class PplSignator < Roda
       render :show
     end
 
-    r.post 'pdf/sign' do |_year|
+    r.post 'pdf/sign' do
       r.redirect '/' if r.params['pdf_to_sign'].nil?
 
-      response['Content-Type'] = 'application/pdf'
-      response['Content-Disposition'] =
-        "attachment; filename=#{Signator.confirmation_name(r.params['pdf_to_sign'][:filename],
-                                                           r.params['delivery_date'])}"
-      Signator.new.call(r.params)
+      # response['Content-Type'] = 'application/pdf'
+      # response['Content-Disposition'] =
+      #   "attachment; filename=#{Signator.confirmation_name(r.params['pdf_to_sign'][:filename],
+      #                                                      r.params['delivery_date'])}"
+
+      fname = r.params['pdf_to_sign'][:filename]
+      delivery_date = r.params['delivery_date']
+
+      # Signator.new.call(r.params)
+      send_file Signator.new.call(r.params),
+                disposition: 'attachment',
+                filename: Signator.confirmation_name(fname, delivery_date),
+                type: 'application/pdf'
     end
 
     r.on do
