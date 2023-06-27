@@ -1,7 +1,15 @@
 # frozen_string_literal: true
 
+require 'dotenv/load'
+
+require_relative 'db'
+require_relative 'models/work'
+
 require_relative 'signator'
+require_relative 'attestator'
+
 require_relative 'views/helpers'
+
 require 'roda'
 
 class PplSignator < Roda
@@ -40,6 +48,15 @@ class PplSignator < Roda
       send_file Signator.new.call(r.params),
                 disposition: 'attachment',
                 filename: Signator.confirmation_name(fname, delivery_date),
+                type: 'application/pdf'
+    end
+
+    r.is 'attestations/sigab', Integer do |work_id|
+      work = Work.where(id: work_id).association_join(:customer).qualify.first
+      # need to find the work
+      send_file Attestator.new.call(work),
+                disposition: 'attachment',
+                filename: 'attestation_sigab_securit.pdf',
                 type: 'application/pdf'
     end
 

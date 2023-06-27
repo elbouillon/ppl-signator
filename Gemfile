@@ -12,8 +12,12 @@ gem 'haml'
 # gestion des pdf
 gem 'hexapdf'
 
+gem 'pg'
+gem 'sequel'
+
 # process and dev
 group :development do
+  gem 'dotenv', '~> 2.8'
   gem 'foreman'
   gem 'rerun'
 end
