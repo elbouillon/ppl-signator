@@ -4,8 +4,10 @@ ruby '3.2.2'
 
 source 'https://rubygems.org'
 
-gem 'bundler'
+# gem 'bundler'
 # webserver
+
+gem 'rackup'
 gem 'roda'
 # code and application
 gem 'haml'
