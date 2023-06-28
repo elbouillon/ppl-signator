@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'dotenv/load'
+require 'dotenv/load' if ENV['RACK_ENV'] == 'developpment'
 
 require_relative 'db'
 require_relative 'models/work'
